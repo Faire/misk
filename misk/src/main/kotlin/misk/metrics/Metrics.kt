@@ -12,9 +12,13 @@ import io.prometheus.client.hotspot.MemoryPoolsExports
 import io.prometheus.client.hotspot.StandardExports
 import io.prometheus.client.hotspot.ThreadExports
 import io.prometheus.client.hotspot.VersionInfoExports
+import misk.digester.PrometheusHistogram
+import org.bouncycastle.util.StringList
 import javax.inject.Inject
 
 class Metrics @Inject internal constructor(val registry: CollectorRegistry) {
+  @Inject private lateinit var prometheusHistogram: PrometheusHistogram
+
   init {
     registry.register(StandardExports())
     registry.register(MemoryPoolsExports())
@@ -36,7 +40,7 @@ class Metrics @Inject internal constructor(val registry: CollectorRegistry) {
   fun summary(name: String, help: String = "", labelNames: List<String> = listOf()): Summary {
     return Summary.build(name, help).labelNames(*labelNames.toTypedArray()).register(registry)
   }
-
+/*
   fun histogram(
     name: String,
     help: String = "",
@@ -46,6 +50,21 @@ class Metrics @Inject internal constructor(val registry: CollectorRegistry) {
     val builder = Histogram.build(name, help).labelNames(*labelNames.toTypedArray())
     if (buckets != null) builder.buckets(*buckets)
     return builder.register(registry)
+  }*/
+
+  //create a prometheus histogram and register the histogram collector with the registry
+  fun histogram(
+          name: String,
+          help: String = "",
+          labelNames: List<String> = listOf(),
+          buckets: DoubleArray? = null
+  ): PrometheusHistogram {
+    //build the prometheus histogram
+    val builder = PrometheusHistogram.build(name, help, labelNames)
+    if (buckets != null) builder.buckets(*buckets)
+    //register the built histogram with the prometheus registry
+    prometheusHistogram.setPrometheusHistogram(builder.register(prometheusHistogram.collectorRegistry))
+    return prometheusHistogram
   }
 
   companion object {

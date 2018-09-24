@@ -1,6 +1,7 @@
 package misk.client
 
 import io.prometheus.client.Histogram
+import misk.digester.PrometheusHistogram
 import misk.metrics.Metrics
 import misk.time.timed
 import okhttp3.Response
@@ -9,7 +10,7 @@ import javax.inject.Singleton
 
 class ClientMetricsInterceptor internal constructor(
   private val actionName: String,
-  private val requestDuration: Histogram
+  private val requestDuration: PrometheusHistogram
 ) : ClientNetworkInterceptor {
 
   override fun intercept(chain: ClientNetworkChain): Response {
@@ -17,6 +18,7 @@ class ClientMetricsInterceptor internal constructor(
     val elapsedMillis = elapsedTime.toMillis().toDouble()
 
     requestDuration.labels(actionName, "all").observe(elapsedMillis)
+    requestDuration.labels()
     requestDuration.labels(actionName, "${result.code() / 100}xx").observe(elapsedMillis)
     requestDuration.labels(actionName, "${result.code()}").observe(elapsedMillis)
 
@@ -25,6 +27,7 @@ class ClientMetricsInterceptor internal constructor(
 
   @Singleton
   class Factory @Inject internal constructor(m: Metrics) : ClientNetworkInterceptor.Factory {
+    //creates a prometheus histogram
     internal val requestDuration = m.histogram(
         name = "client_http_request_latency_ms",
         help = "count and duration in ms of outgoing client requests",

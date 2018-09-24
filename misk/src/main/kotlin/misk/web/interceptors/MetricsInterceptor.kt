@@ -3,6 +3,7 @@ package misk.web.interceptors
 import io.prometheus.client.Histogram
 import misk.Action
 import misk.MiskCaller
+import misk.digester.PrometheusHistogram
 import misk.metrics.Metrics
 import misk.scope.ActionScoped
 import misk.time.timed
@@ -14,7 +15,7 @@ import javax.inject.Singleton
 
 internal class MetricsInterceptor internal constructor(
   private val actionName: String,
-  private val requestDuration: Histogram,
+  private val requestDuration: PrometheusHistogram,
   private val caller: ActionScoped<MiskCaller?>
 ) : NetworkInterceptor {
   override fun intercept(chain: NetworkChain): Response<*> {

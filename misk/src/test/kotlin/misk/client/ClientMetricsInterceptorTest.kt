@@ -4,7 +4,7 @@ import com.google.inject.Guice
 import com.google.inject.Injector
 import com.google.inject.Provides
 import com.google.inject.name.Names
-import io.prometheus.client.Histogram
+import misk.digester.PrometheusHistogram
 import misk.MiskServiceModule
 import misk.inject.KAbstractModule
 import misk.inject.getInstance
@@ -41,7 +41,7 @@ internal class ClientMetricsInterceptorTest {
   val module = TestModule()
 
   @Inject private lateinit var jetty: JettyService
-  private lateinit var requestDuration: Histogram
+  private lateinit var requestDuration: PrometheusHistogram
   private lateinit var clientMetrics: Metrics
   private lateinit var clientInjector: Injector
 
