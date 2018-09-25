@@ -17,6 +17,7 @@ class PrometheusHistogram : HistogramInterface {
             help: String,
             labelNames: List<String> = listOf()
         ): Histogram.Builder {
+            //we can set the classes histogram instance from here?
             return Histogram.build(name, help).labelNames(*labelNames.toTypedArray())
         }
     }

@@ -76,4 +76,5 @@ class Metrics @Inject internal constructor(val registry: CollectorRegistry) {
   }
 }
 
+//this is a static class - any instance of histogram within prometheus histogram will still update this
 internal val Histogram.Child.Value.count get() = buckets.max()?.toInt() ?: 0
