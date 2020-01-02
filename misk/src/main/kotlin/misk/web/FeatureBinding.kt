@@ -44,7 +44,7 @@ import kotlin.reflect.KParameter
  * every each HTTP call. In this method it must bind the features it claimed by providing
  * parameters, reading the request body, writing the response body, or taking the return value.
  */
-internal interface FeatureBinding {
+interface FeatureBinding {
   // TODO: replace bind() with beforeCall/afterCall so we can combine
   //     GrpcRequestFeatureBinding, GrpcResponseFeatureBinding
   fun bind(subject: Subject)
