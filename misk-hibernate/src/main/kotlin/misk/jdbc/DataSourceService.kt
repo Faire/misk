@@ -84,6 +84,9 @@ class DataSourceService(
       hikariConfig.dataSourceProperties["cacheServerConfiguration"] = "true"
       hikariConfig.dataSourceProperties["elideSetAutoCommits"] = "true"
       hikariConfig.dataSourceProperties["maintainTimeStats"] = "false"
+      hikariConfig.dataSourceProperties["useUnicode"] = "true"
+      hikariConfig.dataSourceProperties["CharSet"] = "utf8"
+      hikariConfig.dataSourceProperties["characterEncoding"] = "utf8"
     }
 
     metrics?.let {
